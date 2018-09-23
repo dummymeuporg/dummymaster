@@ -1,11 +1,15 @@
 #define BOOST_LOG_DYN_LINK 1
-#include "player_session.hpp"
 
 #include <boost/asio.hpp>
 #include <boost/log/trivial.hpp>
 
+#include "player_state/state.hpp"
+
+#include "player_session.hpp"
+
 PlayerSession::PlayerSession(boost::asio::ip::tcp::socket s)
-    : m_socket(std::move(s))
+    : m_socket(std::move(s)),
+      m_state(new PlayerState::State(*this))
 {
 }
 

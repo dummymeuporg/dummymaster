@@ -3,18 +3,25 @@
 #include <boost/asio.hpp>
 #include <boost/log/trivial.hpp>
 
-#include "player_state/state.hpp"
+#include "player_state/initial_state.hpp"
 
 #include "player_session.hpp"
 
 PlayerSession::PlayerSession(boost::asio::ip::tcp::socket s)
     : m_socket(std::move(s)),
-      m_state(new PlayerState::State(*this))
+      m_state(new PlayerState::InitialState(*this))
 {
 }
 
 void PlayerSession::start()
 {
+    BOOST_LOG_TRIVIAL(debug) << "Session started.";
+    _doReadHeader();
+}
+
+void PlayerSession::next()
+{
+    BOOST_LOG_TRIVIAL(debug) << "Read next payload.";
     _doReadHeader();
 }
 
@@ -46,7 +53,7 @@ void PlayerSession::_doReadContent()
             if (!ec)
             {
                 BOOST_LOG_TRIVIAL(debug) << "Read " << lenght << " bytes.";
-                _doReadHeader();
+                m_state->onRead(m_payload);
             }
         }
     );

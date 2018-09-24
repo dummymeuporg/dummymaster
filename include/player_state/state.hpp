@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cstdint>
+#include <vector>
 
 class PlayerSession;
 
@@ -9,7 +11,8 @@ namespace PlayerState
     {
     public:
         State(::PlayerSession&);
-    private:
+        virtual void onRead(const std::vector<std::uint8_t>&) = 0;
+    protected:
         ::PlayerSession& m_session;
     };
 }

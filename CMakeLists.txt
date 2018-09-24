@@ -9,4 +9,5 @@ add_executable(dummymaster
     src/player_session.cpp
     src/players_server.cpp
     src/player_state/state.cpp
+    src/player_state/initial_state.cpp
 )

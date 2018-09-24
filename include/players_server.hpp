@@ -8,9 +8,9 @@ class PlayersServer
 {
 public:
     PlayersServer(boost::asio::io_service&, unsigned short);
-    void _doAccept();
 
 private:
+    void _doAccept();
     boost::asio::ip::tcp::acceptor m_acceptor;
 
 };

@@ -13,6 +13,7 @@ class PlayerSession : public std::enable_shared_from_this<PlayerSession>
 {
 public:
     PlayerSession(boost::asio::ip::tcp::socket);
+    void next();
     void start();
 
 private:

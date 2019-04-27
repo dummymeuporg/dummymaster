@@ -1,6 +1,12 @@
+#define BOOST_LOG_DYN_LINK 1
+
 #include <boost/asio/io_service.hpp>
 #include <boost/asio/ip/tcp.hpp>
+#include <boost/log/trivial.hpp>
 
+#include "crypto/sha512.hpp"
+
+#include "account.hpp"
 #include "players_server.hpp"
 #include "player_session.hpp"
 
@@ -24,13 +30,35 @@ void PlayersServer::_doAccept()
         {
             if (!ec)
             {
-                std::make_shared<PlayerSession>(std::move(socket))->start();
+                std::make_shared<PlayerSession>(std::move(socket),
+                                                *this)->start();
             }
             _doAccept();
         }
     );
 }
 
-bool PlayersServer::_accountExists(const std::string& tagName) const {
-    fs::path playerDir{m_accountsPath / tagName};
+Account PlayersServer::fetchAccount(const std::string& tagname) const {
+    fs::path pwdFile{m_accountsPath / tagname / "password"};
+
+	BOOST_LOG_TRIVIAL(debug) << "Try to fetch account " << tagname;
+
+    if (!fs::exists(pwdFile)) {
+		BOOST_LOG_TRIVIAL(debug) << "password file not found.";
+        throw AccountNotFound();
+    }
+
+	Account account(tagname);
+
+    // Read the password file.
+    std::ifstream file(pwdFile.string());
+
+	if (!file.is_open()) {
+		throw AccountNotFound();
+	}
+
+	file.read(reinterpret_cast<char*>(account.password()),
+			  SHA512_DIGEST_LENGTH);
+
+	return account;
 }

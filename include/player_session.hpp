@@ -8,16 +8,22 @@
 
 #include "player_state/state.hpp"
 
+class PlayersServer;
 
 class PlayerSession : public std::enable_shared_from_this<PlayerSession>
 {
 public:
-    PlayerSession(boost::asio::ip::tcp::socket);
+    PlayerSession(boost::asio::ip::tcp::socket, PlayersServer&);
     void next();
     void start();
 
+    PlayersServer& playersServer() {
+        return m_playersServer;
+    }
+
 private:
     boost::asio::ip::tcp::socket m_socket;
+    PlayersServer& m_playersServer;
     void _doReadHeader();
     void _doReadContent();
 

@@ -5,10 +5,14 @@
 
 #include "player_state/initial_state.hpp"
 
+#include "players_server.hpp"
+
 #include "player_session.hpp"
 
-PlayerSession::PlayerSession(boost::asio::ip::tcp::socket s)
+PlayerSession::PlayerSession(boost::asio::ip::tcp::socket s,
+                             PlayersServer& playersServer)
     : m_socket(std::move(s)),
+      m_playersServer(playersServer),
       m_state(new PlayerState::InitialState(*this))
 {
 }

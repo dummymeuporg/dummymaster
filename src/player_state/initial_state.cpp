@@ -45,6 +45,8 @@ void PlayerState::InitialState::onRead(
         std::move(m_session.playersServer().fetchAccount(tagname))
     );
 
+    hexdump(account.password(), SHA512_DIGEST_LENGTH);
+
     if(::memcmp(account.password(), hash, SHA512_DIGEST_LENGTH)) {
         BOOST_LOG_TRIVIAL(debug) << "Wrong password.";
     } else {

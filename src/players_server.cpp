@@ -5,10 +5,12 @@
 #include "player_session.hpp"
 
 PlayersServer::PlayersServer(boost::asio::io_service& ioService,
-                             unsigned short port)
+                             unsigned short port,
+                             const char* accountsPath)
     : m_acceptor(ioService,
                  boost::asio::ip::tcp::endpoint(boost::asio::ip::tcp::v4(),
-                                                port))
+                                                port)),
+    m_accountsPath(std::move(accountsPath))
 {
     _doAccept();
 }
@@ -27,4 +29,8 @@ void PlayersServer::_doAccept()
             _doAccept();
         }
     );
+}
+
+bool PlayersServer::_accountExists(const std::string& tagName) const {
+    fs::path playerDir{m_accountsPath / tagName};
 }

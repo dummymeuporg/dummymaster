@@ -28,4 +28,6 @@ void PlayerState::InitialState::onRead(
         - SHA512_DIGEST_LENGTH;
     BOOST_LOG_TRIVIAL(debug) << "Tagname is: " << tagname;
 
+    // TODO: Check if the username exists!
+
 }

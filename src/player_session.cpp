@@ -62,3 +62,7 @@ void PlayerSession::_doReadContent()
         }
     );
 }
+
+void PlayerSession::changeState(PlayerState::State* state) {
+    m_state.reset(state);
+}

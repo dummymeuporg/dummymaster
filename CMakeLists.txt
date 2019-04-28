@@ -13,6 +13,8 @@ add_executable(dummymaster
     src/players_server.cpp
     src/player_state/state.cpp
     src/player_state/initial_state.cpp
+    src/player_state/right_credentials_state.cpp
+    src/player_state/wrong_credentials_state.cpp
 )
 
 target_link_libraries(dummymaster dummy)

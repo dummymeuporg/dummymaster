@@ -21,6 +21,8 @@ public:
         return m_playersServer;
     }
 
+    void changeState(PlayerState::State* state);
+
 private:
     boost::asio::ip::tcp::socket m_socket;
     PlayersServer& m_playersServer;

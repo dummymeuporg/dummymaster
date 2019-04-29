@@ -3,33 +3,33 @@
 #include <boost/asio.hpp>
 #include <boost/log/trivial.hpp>
 
-#include "player_state/initial_state.hpp"
+#include "game_state/initial_state.hpp"
 
-#include "players_server.hpp"
+#include "game_server.hpp"
 
-#include "player_session.hpp"
+#include "game_session.hpp"
 
-PlayerSession::PlayerSession(boost::asio::ip::tcp::socket s,
-                             PlayersServer& playersServer)
+GameSession::GameSession(boost::asio::ip::tcp::socket s,
+                         GameServer& gameServer)
     : m_socket(std::move(s)),
-      m_playersServer(playersServer),
-      m_state(new PlayerState::InitialState(*this))
+      m_gameServer(gameServer),
+      m_state(new GameState::InitialState(*this))
 {
+
 }
 
-void PlayerSession::start()
+void GameSession::start()
 {
     BOOST_LOG_TRIVIAL(debug) << "Session started.";
     _doReadHeader();
 }
 
-void PlayerSession::next()
-{
+void GameSession::next() {
     BOOST_LOG_TRIVIAL(debug) << "Read next payload.";
     _doReadHeader();
 }
 
-void PlayerSession::_doReadHeader()
+void GameSession::_doReadHeader()
 {
     auto self(shared_from_this());
     boost::asio::async_read(
@@ -46,23 +46,23 @@ void PlayerSession::_doReadHeader()
     );
 }
 
-void PlayerSession::_doReadContent()
+void GameSession::_doReadContent()
 {
     auto self(shared_from_this());
     boost::asio::async_read(
         m_socket,
         boost::asio::buffer(m_payload, m_header),
-        [this, self](boost::system::error_code ec, std::size_t lenght)
+        [this, self](boost::system::error_code ec, std::size_t length)
         {
             if (!ec)
             {
-                BOOST_LOG_TRIVIAL(debug) << "Read " << lenght << " bytes.";
+                BOOST_LOG_TRIVIAL(debug) << "Read " << length << " bytes.";
                 m_state->onRead(m_payload);
             }
         }
     );
 }
 
-void PlayerSession::changeState(PlayerState::State* state) {
+void GameSession::changeState(GameState::State* state) {
     m_state.reset(state);
 }

@@ -31,5 +31,5 @@ private:
 
     std::uint16_t m_header;
     std::vector<std::uint8_t> m_payload;
-    std::unique_ptr<PlayerState::State> m_state;
+    std::shared_ptr<PlayerState::State> m_state;
 };

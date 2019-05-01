@@ -15,6 +15,7 @@ GameServer::GameServer(boost::asio::io_service& ioService,
                                                 port)),
     m_confPath(confPath)
 {
+    BOOST_LOG_TRIVIAL(debug) << "Game server started. Accept connections.";
     _doAccept();
 }
 
@@ -25,6 +26,7 @@ void GameServer::_doAccept() {
         {
             if (!ec)
             {
+                BOOST_LOG_TRIVIAL(debug) << "Game server create session.";
                 std::make_shared<GameSession>(std::move(socket),
                                               *this)->start();
             }

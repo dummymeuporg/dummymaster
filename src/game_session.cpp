@@ -20,7 +20,7 @@ GameSession::GameSession(boost::asio::ip::tcp::socket s,
 
 void GameSession::start()
 {
-    BOOST_LOG_TRIVIAL(debug) << "Session started.";
+    BOOST_LOG_TRIVIAL(debug) << "Game Session started.";
     _doReadHeader();
 }
 

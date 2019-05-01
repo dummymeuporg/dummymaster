@@ -16,4 +16,9 @@ GameState::InitialState::InitialState(::GameSession& session)
 void GameState::InitialState::onRead(
     const std::vector<std::uint8_t>& buffer)
 {
+    const std::string& serverName(
+        reinterpret_cast<const char*>(buffer.data()));
+    BOOST_LOG_TRIVIAL(debug) << "Hello, " << serverName;
+
+    // Check if the server exists.
 }

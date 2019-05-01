@@ -3,6 +3,7 @@
 
 #include <boost/asio.hpp>
 
+#include "game_server.hpp"
 #include "players_server.hpp"
 
 int main(int argc, char* argv[])
@@ -15,7 +16,7 @@ int main(int argc, char* argv[])
 
     boost::asio::io_service ioservice;
     PlayersServer server(ioservice, 33337, argv[1]);
-    //GameServers gameservers(ioservice, 33338);
+    GameServer gameserver(ioservice, 33338, argv[2]);
     ioservice.run();
 
     return EXIT_SUCCESS;

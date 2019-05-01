@@ -2,10 +2,13 @@
 
 #include <boost/asio/io_service.hpp>
 #include <boost/asio/ip/tcp.hpp>
+#include <boost/filesystem.hpp>
 #include <boost/log/trivial.hpp>
 
 #include "game_server.hpp"
 #include "game_session.hpp"
+
+namespace fs = boost::filesystem;
 
 GameServer::GameServer(boost::asio::io_service& ioService,
                        unsigned short port,
@@ -13,7 +16,9 @@ GameServer::GameServer(boost::asio::io_service& ioService,
     : m_acceptor(ioService,
                  boost::asio::ip::tcp::endpoint(boost::asio::ip::tcp::v4(),
                                                 port)),
-    m_confPath(confPath)
+    m_confPath(confPath),
+    m_rsaKeyPair(fs::path(m_confPath / ".conf" / "pub.pem").string(),
+                 fs::path(m_confPath / ".conf" / "priv.pem").string())
 {
     BOOST_LOG_TRIVIAL(debug) << "Game server started. Accept connections.";
     _doAccept();

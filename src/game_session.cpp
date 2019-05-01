@@ -3,6 +3,8 @@
 #include <boost/asio.hpp>
 #include <boost/log/trivial.hpp>
 
+#include "crypto/rsa_keypair.hpp"
+
 #include "game_state/initial_state.hpp"
 
 #include "game_server.hpp"
@@ -65,4 +67,43 @@ void GameSession::_doReadContent()
 
 void GameSession::changeState(GameState::State* state) {
     m_state.reset(state);
+}
+
+std::vector<std::uint8_t>
+GameSession::loadProfilePublicKey(const char* profile) {
+
+    size_t keySize = 0;
+    std::vector<std::uint8_t> rawKey;
+
+    ::FILE *fpub = ::fopen(
+        fs::path(m_gameServer.confPath() /
+            "game_servers" / profile / "pub.pem").string().c_str(), "rb");
+    if (nullptr == fpub) {
+        throw Dummy::Crypto::PEMFileError();
+    }
+
+    ::EVP_PKEY* profilePubKey = ::PEM_read_PUBKEY(fpub, NULL, NULL, NULL);
+    if (nullptr == profilePubKey) {
+        ::fclose(fpub);
+        throw Dummy::Crypto::KeyLoadingError();
+    }
+
+    // From now on, we do not need the file descriptor anymore.
+    ::fclose(fpub);
+
+    ::EVP_PKEY_get_raw_public_key(profilePubKey, NULL, &keySize);
+
+    if(0 == keySize) {
+        ::EVP_PKEY_free(profilePubKey);
+        throw Dummy::Crypto::KeyLoadingError();
+    }
+
+    rawKey.resize(keySize);
+
+    ::EVP_PKEY_get_raw_public_key(profilePubKey, rawKey.data(), &keySize);
+
+    BOOST_LOG_TRIVIAL(debug) << "Key size: " << keySize << " bytes.";
+
+    return rawKey;
+
 }

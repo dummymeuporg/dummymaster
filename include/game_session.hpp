@@ -21,7 +21,13 @@ public:
         return m_gameServer;
     }
 
+    boost::asio::ip::tcp::socket& socket() {
+        return m_socket;
+    }
+
     void changeState(GameState::State* state);
+
+    std::vector<std::uint8_t> loadProfilePublicKey(const char* profile);
 
 private:
     boost::asio::ip::tcp::socket m_socket;

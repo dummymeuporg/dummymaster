@@ -8,7 +8,7 @@
 
 int main(int argc, char* argv[])
 {
-    if (argc < 2) {
+    if (argc < 3) {
         std::cerr << "Usage: " << argv[0] << " ACCOUNTS_DIR CONF_DIR"
             << std::endl;
         exit(EXIT_FAILURE);

@@ -33,7 +33,17 @@ public:
         return m_serverName;
     }
 
+    std::uint16_t connectedPlayers() const {
+        return m_connectedPlayers;
+    }
+
+    std::uint16_t maxSlots() const {
+        return m_maxSlots;
+    }
+
     GameSession& setServerName(const std::string& serverName);
+    GameSession& setConnectedPlayers(std::uint16_t connectedPlayers);
+    GameSession& setMaxSlots(std::uint16_t maxSlots);
 
 private:
     boost::asio::ip::tcp::socket m_socket;
@@ -45,4 +55,6 @@ private:
     std::vector<uint8_t> m_payload;
     std::shared_ptr<GameState::State> m_state;
     std::string m_serverName;
+    std::uint16_t m_connectedPlayers;
+    std::uint16_t m_maxSlots;
 };

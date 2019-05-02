@@ -17,6 +17,7 @@ add_executable(dummymaster
     src/player_state/wrong_credentials_state.cpp
     src/game_session.cpp
     src/game_server.cpp
+    src/game_state/profile_exists_state.cpp
     src/game_state/initial_state.cpp
     src/game_state/state.cpp
 )

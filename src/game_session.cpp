@@ -15,7 +15,10 @@ GameSession::GameSession(boost::asio::ip::tcp::socket s,
                          GameServer& gameServer)
     : m_socket(std::move(s)),
       m_gameServer(gameServer),
-      m_state(new GameState::InitialState(*this))
+      m_state(new GameState::InitialState(*this)),
+      m_serverName(""),
+      m_connectedPlayers(0),
+      m_maxSlots(0)
 {
 
 }
@@ -74,6 +77,18 @@ GameSession::setServerName(const std::string& serverName)
 {
     m_serverName = serverName;
     return *this;
+}
+
+GameSession&
+GameSession::setConnectedPlayers(std::uint16_t connectedPlayers)
+{
+    m_connectedPlayers = connectedPlayers;
+}
+
+GameSession&
+GameSession::setMaxSlots(std::uint16_t maxSlots)
+{
+    m_maxSlots = maxSlots;
 }
 
 std::vector<std::uint8_t>

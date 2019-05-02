@@ -24,6 +24,16 @@ GameServer::GameServer(boost::asio::io_service& ioService,
     _doAccept();
 }
 
+GameServer&
+GameServer::connectServer(std::shared_ptr<GameSession> gameSession)
+{
+    const std::string& serverName(gameSession->serverName());
+    if (!isServerConnected(serverName)) {
+        m_connectedGameServers[serverName] = gameSession;
+    }
+    return *this;
+}
+
 void GameServer::_doAccept() {
     m_acceptor.async_accept(
         [this](boost::system::error_code ec,

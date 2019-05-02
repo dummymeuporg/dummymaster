@@ -29,6 +29,12 @@ public:
 
     std::vector<std::uint8_t> loadProfilePublicKey(const char* profile);
 
+    const std::string& serverName() const {
+        return m_serverName;
+    }
+
+    GameSession& setServerName(const std::string& serverName);
+
 private:
     boost::asio::ip::tcp::socket m_socket;
     GameServer& m_gameServer;
@@ -38,4 +44,5 @@ private:
     std::uint16_t m_header;
     std::vector<uint8_t> m_payload;
     std::shared_ptr<GameState::State> m_state;
+    std::string m_serverName;
 };

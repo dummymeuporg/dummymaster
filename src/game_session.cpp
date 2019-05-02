@@ -69,6 +69,13 @@ void GameSession::changeState(GameState::State* state) {
     m_state.reset(state);
 }
 
+GameSession&
+GameSession::setServerName(const std::string& serverName)
+{
+    m_serverName = serverName;
+    return *this;
+}
+
 std::vector<std::uint8_t>
 GameSession::loadProfilePublicKey(const char* profile) {
 

@@ -86,12 +86,14 @@ PlayerState::InitialState::_sendResult(std::uint8_t result,
         {
             if (!ec) {
                 if (result == 1) {
+                /*
                     m_session.changeState(
                         new PlayerState::RightCredentialsState(
                             m_session,
                             account
                         )
                     );
+                    */
                 } else {
                     m_session.changeState(
                         new PlayerState::WrongCredentialsState(

@@ -4,8 +4,10 @@
 
 
 PlayerState::WrongCredentialsState::WrongCredentialsState(
-    ::PlayerSession& session
-) : PlayerState::State(session)
+    ::PlayerSession& session,
+    unsigned int attempts
+) : PlayerState::State(session),
+    m_attempts(attempts)
 {
     // Send response to server.
     // Disconnect?
@@ -17,5 +19,5 @@ PlayerState::WrongCredentialsState::WrongCredentialsState(
 void PlayerState::WrongCredentialsState::onRead(
     const std::vector<std::uint8_t>& buffer)
 {
-    // This should not be called, I think.
+    // Again, check if password matches blablabla...
 }

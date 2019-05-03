@@ -38,7 +38,7 @@ void PlayersServer::_doAccept()
     );
 }
 
-Account PlayersServer::fetchAccount(const std::string& tagname) const {
+Account* PlayersServer::fetchAccount(const std::string& tagname) const {
     fs::path pwdFile{m_accountsPath / tagname / "password"};
 
 	BOOST_LOG_TRIVIAL(debug) << "Try to fetch account " << tagname;
@@ -48,7 +48,7 @@ Account PlayersServer::fetchAccount(const std::string& tagname) const {
         throw AccountNotFound();
     }
 
-	Account account(tagname);
+    Account* account = new Account(tagname);
 
     // Read the password file.
     std::ifstream file(pwdFile.string());
@@ -57,8 +57,16 @@ Account PlayersServer::fetchAccount(const std::string& tagname) const {
 		throw AccountNotFound();
 	}
 
-	file.read(reinterpret_cast<char*>(account.password()),
+	file.read(reinterpret_cast<char*>(account->password()),
 			  SHA512_DIGEST_LENGTH);
 
 	return account;
+}
+
+void PlayersServer::connectAccount(Account account)
+{
+    account.generateSessionUUID();
+    m_connectedAccounts[account.tagname()] = std::make_shared<Account>(
+            std::move(account)
+    );
 }

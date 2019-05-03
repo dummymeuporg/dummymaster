@@ -17,6 +17,10 @@ public:
     void next();
     void start();
 
+    boost::asio::ip::tcp::socket& socket() {
+        return m_socket;
+    }
+
     PlayersServer& playersServer() {
         return m_playersServer;
     }

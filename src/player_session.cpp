@@ -1,5 +1,7 @@
 #define BOOST_LOG_DYN_LINK 1
 
+#include <iostream>
+
 #include <boost/asio.hpp>
 #include <boost/log/trivial.hpp>
 
@@ -13,7 +15,7 @@ PlayerSession::PlayerSession(boost::asio::ip::tcp::socket s,
                              PlayersServer& playersServer)
     : m_socket(std::move(s)),
       m_playersServer(playersServer),
-      m_state(new PlayerState::InitialState(*this))
+      m_state(std::make_shared<PlayerState::InitialState>(*this))
 {
 }
 
@@ -63,6 +65,7 @@ void PlayerSession::_doReadContent()
     );
 }
 
-void PlayerSession::changeState(PlayerState::State* state) {
-    m_state.reset(state);
+void PlayerSession::changeState(std::shared_ptr<PlayerState::State> state) {
+    std::cerr << "Change state." << std::endl;
+    m_state = state;
 }

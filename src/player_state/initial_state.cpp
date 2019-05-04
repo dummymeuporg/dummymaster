@@ -67,6 +67,7 @@ PlayerState::InitialState::_sendResult(std::uint8_t result,
                                        std::shared_ptr<Account> account)
 {
     auto self(m_session.shared_from_this());
+    auto selfState(shared_from_this());
 
     std::vector<std::uint8_t> packet(
         sizeof(std::uint16_t) + sizeof(std::uint8_t)
@@ -80,23 +81,22 @@ PlayerState::InitialState::_sendResult(std::uint8_t result,
         boost::asio::buffer(packet, packet.size()),
         [this,
          self,
+         selfState,
          result,
          account
         ](boost::system::error_code ec, std::size_t length)
         {
             if (!ec) {
                 if (result == 1) {
-                /*
                     m_session.changeState(
-                        new PlayerState::RightCredentialsState(
+                        std::make_shared<PlayerState::RightCredentialsState>(
                             m_session,
                             account
                         )
                     );
-                    */
                 } else {
                     m_session.changeState(
-                        new PlayerState::WrongCredentialsState(
+                        std::make_shared<PlayerState::WrongCredentialsState>(
                             m_session, 
                             1 /* attempts */
                         )

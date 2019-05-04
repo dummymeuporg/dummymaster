@@ -25,7 +25,7 @@ public:
         return m_playersServer;
     }
 
-    void changeState(PlayerState::State* state);
+    void changeState(std::shared_ptr<PlayerState::State> state);
 
 private:
     boost::asio::ip::tcp::socket m_socket;
